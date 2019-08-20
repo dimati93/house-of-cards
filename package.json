@@ -1,0 +1,25 @@
+{
+  "name": "house-of-cards",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dimati93/house-of-cards.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dimati93/house-of-cards/issues"
+  },
+  "homepage": "https://github.com/dimati93/house-of-cards#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "ssh-exec": "^2.0.0",
+    "wake_on_lan": "^1.0.0"
+  }
+}

@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "run": "npm i || npm run start"
   },
   "repository": {
     "type": "git",
@@ -19,7 +20,9 @@
   "homepage": "https://github.com/dimati93/house-of-cards#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "ping": "^0.2.2",
     "ssh-exec": "^2.0.0",
+    "vue": "^2.6.10",
     "wake_on_lan": "^1.0.0"
   }
 }

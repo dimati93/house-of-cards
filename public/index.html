@@ -2,11 +2,20 @@
 <head>
     <title>index - house-of-cards</title>
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <script src="/dist/vue/vue.min.js"></script>
 </head>
 <body>
-    <h1>Welcome, House.</h1>
-    
-    <form method="POST" action="/api/0/wake">
-        <button type="submit">wake</button>
-    </form>
+    <div id="app">
+        <div v-for="machine in machines">
+            <div class="machine-info-container">
+                <h2>{{machine.host}}</h2>
+                <template v-if="machine.status.online">
+                    <p>Online</p>
+                    <pre>{{machine.status.nvidiaStats}}</pre>
+                </template>
+            </div>
+        </div>
+    </div>
+
+    <script src="/spa.js"></script>
 </body>

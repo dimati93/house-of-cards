@@ -1,54 +1,11 @@
 var express = require('express');
-var wol = require('wake_on_lan');
-var sshExec = require('ssh-exec');
-var config = require('./config.js');
+var apiMachinesRouter = require('./api/machines');
 
 var app = express();
 
-var machineApiRouter = express.Router()
-
-machineApiRouter.get('/', function (req, res) {
-    res.json(config.machines || []);
-});
-
-machineApiRouter.get('/:machineId/status', function (req, res) {
-    let machine = config.machines[req.params.machineId];
-    if (!machine) {
-        res.sendStatus(500);
-        return;
-    }
-
-    sshExec('nvidia-smi', {
-        user: machine.user,
-        host: machine.host,
-        password: machine.password
-    }, function (err, stdout, stderr) {
-        if (err) {
-            res.status(500).send(stderr);
-        } else {
-            res.send(stdout);
-        }
-    });
-});
-
-machineApiRouter.post('/:machineId/wake', function (req, res) {
-    let machine = config.machines[req.params.machineId];
-    if (!machine) {
-        res.sendStatus(500);
-        return;
-    }
-
-    wol.wake(machine.mac, function (error) {
-        if (error) {
-            res.status(500).send('Failure: ' + error);
-        } else {
-            res.send('OK');
-        }
-    })
-});
-
-app.use('/api/machines', machineApiRouter);
+app.use('/api/machines', apiMachinesRouter);
 app.use(express.static('public'));
+app.use('/dist/vue', express.static('node_modules/vue/dist'));
 
 app.set('port', process.env.PORT || 8080);
 

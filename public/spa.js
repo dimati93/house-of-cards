@@ -1,5 +1,7 @@
 (function () {
     function ready () {
+        Vue.use(VueMaterial.default)
+
         var app = new Vue({
             el: '#app',
             data: {
@@ -16,6 +18,9 @@
                     })
                     .then(function(json) {
                         app.machines[i].status = json; 
+                    })
+                    .then(function () {
+                        setTimeout(update, 5000);
                     });
             });
         }
@@ -27,7 +32,6 @@
             .then(function(json) {
                 app.machines = json.map(m => { return {id: m.id, host : m.host, status: {}}});
                 update();
-                setInterval(update, 5000);
             });
     }
 

@@ -20,9 +20,11 @@
   "homepage": "https://github.com/dimati93/house-of-cards#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "node-ssh": "^6.0.0",
     "ping": "^0.2.2",
-    "ssh-exec": "^2.0.0",
     "vue": "^2.6.10",
-    "wake_on_lan": "^1.0.0"
+    "vue-material": "^1.0.0-beta-11",
+    "wake_on_lan": "^1.0.0",
+    "xml-js": "^1.6.11"
   }
 }

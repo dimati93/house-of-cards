@@ -1,8 +1,9 @@
 var express = require('express');
 var wol = require('wake_on_lan');
 var ping = require('ping');
-var sshExec = require('ssh-exec');
+var nodeSsh = require('node-ssh');
 var config = require('../config');
+var xmlConvert = require('xml-js')
 
 var router = express.Router()
 
@@ -36,17 +37,30 @@ router.get('/:machineId/status', function (req, res) {
             return;
         }
 
-        sshExec('nvidia-smi', {
-            user: machine.user,
-            host: machine.host,
-            password: machine.password
-        }, function (err, stdout, stderr) {
-            if (err) {
-                res.status(500).json({ online: true, error: stderr });
-                return;
-            } 
+        ssh = new nodeSsh()
 
-            res.json({ online: true, nvidiaStats: stdout });            
+        ssh.connect({
+            host: machine.host,
+            username: machine.user,
+            password: machine.password
+        }).then(function () {
+            var status = { online: true };
+
+            var gpuStatus = ssh.execCommand('nvidia-smi -q -x')
+                .then(function(result) {
+                    var xml = result.stdout;
+                    let js = xmlConvert.xml2js(xml, { compact: true });
+                    status.nvidiaStats = js.nvidia_smi_log;
+                })
+
+            var userStatus = ssh.execCommand('who')
+                .then(function(result) {
+                    status.users = result.stdout;
+                })
+
+            Promise.all([gpuStatus, userStatus]).then(function () {
+                res.json(status);
+            });
         });
     });    
 });

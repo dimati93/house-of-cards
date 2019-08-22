@@ -1,21 +1,64 @@
 <!DOCTYPE html>
+
 <head>
     <title>index - house-of-cards</title>
+    <meta content="width=device-width,initial-scale=1,minimal-ui" name="viewport">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-    <script src="/dist/vue/vue.min.js"></script>
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons">
+    <link rel="stylesheet" href="https://unpkg.com/vue-material/dist/vue-material.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/vue-material/dist/theme/default.css">
 </head>
+
 <body>
     <div id="app">
-        <div v-for="machine in machines">
-            <div class="machine-info-container">
-                <h2>{{machine.host}}</h2>
-                <template v-if="machine.status.online">
-                    <p>Online</p>
-                    <pre>{{machine.status.nvidiaStats}}</pre>
-                </template>
-            </div>
-        </div>
+        <md-app md-waterfall md-mode="fixed-last">
+            <md-app-toolbar class="md-large md-dense md-primary">
+                <div class="md-toolbar-row">
+                    <div class="md-toolbar-section-start">
+                        <span class="md-title">House of Cards</span>
+                    </div>
+
+                    <div class="md-toolbar-section-end">
+                        <md-button class="md-icon-button">
+                            <md-icon>more_vert</md-icon>
+                        </md-button>
+                    </div>
+                </div>
+
+                <div class="md-toolbar-row">
+                    <md-tabs class="md-primary">
+                        <md-tab id="tab-home" md-label="Home"></md-tab>
+                    </md-tabs>
+                </div>
+            </md-app-toolbar>
+            <md-app-content>
+                <div v-for="machine in machines">
+                    <div class="machine-info-container">
+
+                        <template v-if="machine.status.online">
+                            <md-content class="md-elevation-6">
+                                <h2>{{machine.host}}</h2>
+                                <p>Online</p>
+                                <h3>GPU info</h2>
+                                    <p>Timestamp: {{machine.status.nvidiaStats.timestamp._text}}</p>
+                                    <p>Driver Vesrion: {{machine.status.nvidiaStats.driver_version._text}}</p>
+                                    <p>GPU #: {{machine.status.nvidiaStats.attached_gpus._text}}</p>
+                                    <div v-for="gpu in machine.status.nvidiaStats.gpu">
+                                        <h4>GPU {{gpu._attributes.id}}</h4>
+                                        <pre>{{gpu}}</pre>
+                                    </div>
+
+                                    <h3>Users info</h2>
+                                        <pre>{{machine.status.users}}</pre>
+                            </md-content>
+                        </template>
+                    </div>
+                </div>
+            </md-app-content>
+        </md-app>
     </div>
 
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://unpkg.com/vue-material"></script>
     <script src="/spa.js"></script>
 </body>

@@ -37,7 +37,7 @@
 
                         <template v-if="machine.status.online">
                             <md-content class="md-elevation-6">
-                                <h2>{{machine.host}}</h2>
+                                <h2>{{machine.name}}</h2>
                                 <p>Online</p>
                                 <h3>GPU info</h2>
                                     <p>Timestamp: {{machine.status.nvidiaStats.timestamp._text}}</p>

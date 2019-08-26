@@ -17,7 +17,7 @@ router.get('/', function (req, res) {
     let model = machines.map((m, i) => { 
         return { 
             id: i,
-            host: m.host 
+            name: m.name
         } 
     });
 

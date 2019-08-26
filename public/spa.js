@@ -1,6 +1,17 @@
 (function () {
     function ready () {
-        Vue.use(VueMaterial.default)
+        Vue.use(VueMaterial.default);
+        Vue.component('machine-header', {
+            props: {
+                title: String, 
+                machineOnline: Boolean
+            },
+            data: function () {
+                return {};
+            },
+            template: '<span class="machine-header"><md-icon v-bind:class="{ \'machine-power-icon--on\': machineOnline, \'machine-power-icon--off\': !machineOnline }">power_settings_new</md-icon> {{ title }}</span>'
+        });
+
 
         var app = new Vue({
             el: '#app',
@@ -30,7 +41,7 @@
                 return response.json();
             })
             .then(function(json) {
-                app.machines = json.map(m => { return {id: m.id, host : m.host, status: {}}});
+                app.machines = json.map(m => { return {id: m.id, name : m.name, status: {}}});
                 update();
             });
     }

@@ -7,12 +7,11 @@
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons">
     <link rel="stylesheet" href="https://unpkg.com/vue-material/dist/vue-material.min.css">
     <link rel="stylesheet" href="https://unpkg.com/vue-material/dist/theme/default.css">
-
-    
+    <link rel="stylesheet" href="/site.css">
 </head>
 
 <body>
-    <div id="app">
+    <template id="app">
         <md-app md-waterfall md-mode="fixed-last">
             <md-app-toolbar class="md-large md-dense md-primary">
                 <div class="md-toolbar-row">
@@ -29,46 +28,41 @@
 
                 <div class="md-toolbar-row">
                     <md-tabs class="md-primary">
-                        <md-tab id="tab-home" md-label="Home"></md-tab>
+                        <md-tab id="tab-gpu" md-label="GPU"></md-tab>
+                        <md-tab id="tab-users" md-label="Users"></md-tab>
                     </md-tabs>
                 </div>
             </md-app-toolbar>
             <md-app-content>
                 <div v-for="machine in machines">
-                    <div class="machine-info-container">
-
+                    <md-content class="md-elevation-6 machine-info-container">
+                        <machine-header v-bind:machine-online="machine.status.online" v-bind:title="machine.name">
+                        </machine-header>
                         <template v-if="machine.status.online">
-                            <md-content class="md-elevation-6">
-                                <h2>{{machine.name}}</h2>
-                                <p>Online</p>
-                                <h3>GPU info</h2>
-                                    <p>Timestamp: {{machine.status.nvidiaStats.timestamp._text}}</p>
-                                    <p>Driver Vesrion: {{machine.status.nvidiaStats.driver_version._text}}</p>
-                                    <div>
-                                        <md-card class="gpu-card" v-for="gpu in machine.status.nvidiaStats.gpu">
-                                            <md-card-header>
-                                                <div class="md-title">GPU {{gpu._attributes.id}}</div>
-                                            </md-card-header>
-                                            
-                                            <md-card-content>
-                                                <p>GPU utilization: {{gpu.utilization.gpu_util._text}}</p>
-                                                <p>Memory utilization: {{gpu.utilization.memory_util._text}}</p>
-                                                <p>Power:
-                                                    {{gpu.power_readings.power_draw._text}}/{{gpu.power_readings.power_limit._text}}
-                                                </p>
-                                            </md-card-content>
-                                        </md-card>
-                                    </div>
+                            <div class="md-layout md-gutter gpu-cards-container">
+                                <md-card class="md-layout-item md-medium-size-50 md-small-size-100 gpu-card" v-for="(gpu, index) in machine.status.nvidiaStats.gpu"
+                                    v-bind:key="gpu._attributes.id">
+                                    <md-card-header>
+                                        <div class="md-title" :title="gpu._attributes.id">
+                                            <md-icon class="icon-gpu">memory</md-icon> GPU {{ index }}
+                                        </div>
+                                    </md-card-header>
 
-                                    <h3>Users info</h2>
-                                        <pre>{{machine.status.users}}</pre>
-                            </md-content>
+                                    <md-card-content>
+                                        <p>GPU utilization: {{gpu.utilization.gpu_util._text}}</p>
+                                        <p>Memory utilization: {{gpu.utilization.memory_util._text}}</p>
+                                        <p>Power:
+                                            {{gpu.power_readings.power_draw._text}}/{{gpu.power_readings.power_limit._text}}
+                                        </p>
+                                    </md-card-content>
+                                </md-card>
+                            </div>
                         </template>
-                    </div>
+                    </md-content>
                 </div>
             </md-app-content>
         </md-app>
-    </div>
+    </template>
 
     <script src="https://unpkg.com/vue"></script>
     <script src="https://unpkg.com/vue-material"></script>

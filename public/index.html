@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons">
     <link rel="stylesheet" href="https://unpkg.com/vue-material/dist/vue-material.min.css">
     <link rel="stylesheet" href="https://unpkg.com/vue-material/dist/theme/default.css">
+
+    
 </head>
 
 <body>
@@ -42,10 +44,20 @@
                                 <h3>GPU info</h2>
                                     <p>Timestamp: {{machine.status.nvidiaStats.timestamp._text}}</p>
                                     <p>Driver Vesrion: {{machine.status.nvidiaStats.driver_version._text}}</p>
-                                    <p>GPU #: {{machine.status.nvidiaStats.attached_gpus._text}}</p>
-                                    <div v-for="gpu in machine.status.nvidiaStats.gpu">
-                                        <h4>GPU {{gpu._attributes.id}}</h4>
-                                        <pre>{{gpu}}</pre>
+                                    <div>
+                                        <md-card class="gpu-card" v-for="gpu in machine.status.nvidiaStats.gpu">
+                                            <md-card-header>
+                                                <div class="md-title">GPU {{gpu._attributes.id}}</div>
+                                            </md-card-header>
+                                            
+                                            <md-card-content>
+                                                <p>GPU utilization: {{gpu.utilization.gpu_util._text}}</p>
+                                                <p>Memory utilization: {{gpu.utilization.memory_util._text}}</p>
+                                                <p>Power:
+                                                    {{gpu.power_readings.power_draw._text}}/{{gpu.power_readings.power_limit._text}}
+                                                </p>
+                                            </md-card-content>
+                                        </md-card>
                                     </div>
 
                                     <h3>Users info</h2>

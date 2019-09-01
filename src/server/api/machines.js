@@ -14,12 +14,12 @@ router.get('/', function (req, res) {
         res.sendStatus(204);
         return;
     }
-    
-    let model = machines.map((m, i) => { 
-        return { 
+
+    let model = machines.map((m, i) => {
+        return {
             id: i,
             name: m.name
-        } 
+        }
     });
 
     res.json(model);
@@ -34,7 +34,7 @@ router.get('/:machineId/gpu', function (req, res) {
 
     ping.sys.probe(machine.host, function (isAlive) {
         if (!isAlive) {
-            res.json({online: 'offline'});
+            res.json({ online: 'offline' });
             return;
         }
 
@@ -46,18 +46,26 @@ router.get('/:machineId/gpu', function (req, res) {
             password: machine.password
         }).then(function () {
             ssh.execCommand('nvidia-smi -q -x')
-                .then(function(result) {
+                .then(function (result) {
                     var xml = result.stdout;
                     let js = xmlConvert.xml2js(xml, { compact: true });
                     return map.toGpuStatus(js.nvidia_smi_log);
                 })
-                .then(function (nvidiaStats) { 
+                .then(function (nvidiaStats) {
                     ssh.dispose();
                     var status = { online: 'online', nvidiaStats: nvidiaStats };
-                    res.json(status); 
+                    res.json(status);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    res.sendStatus(500);
                 });
-        });
-    });    
+        })
+        .catch((error) => {
+            console.log(error);
+            res.sendStatus(500);
+        });;
+    });
 });
 
 router.get('/:machineId/users', function (req, res) {
@@ -69,7 +77,7 @@ router.get('/:machineId/users', function (req, res) {
 
     ping.sys.probe(machine.host, function (isAlive) {
         if (!isAlive) {
-            res.json({online: false});
+            res.json({ online: 'offline' });
             return;
         }
 
@@ -80,25 +88,23 @@ router.get('/:machineId/users', function (req, res) {
             username: machine.user,
             password: machine.password
         }).then(function () {
-            var status = { online: true };
-
-            var gpuStatus = ssh.execCommand('nvidia-smi -q -x')
-                .then(function(result) {
-                    var xml = result.stdout;
-                    let js = xmlConvert.xml2js(xml, { compact: true });
-                    status.nvidiaStats = js.nvidia_smi_log;
+            ssh.execCommand('who')
+                .then(function (result) {
+                    console.log(result.stdout);
+                    return map.toUsers(result.stdout);
+                }).then(function (result) {
+                    var status = { online: 'online', users: result };
+                    res.json(status);
                 })
-
-            var userStatus = ssh.execCommand('who')
-                .then(function(result) {
-                    status.users = result.stdout;
-                })
-
-            Promise.all([gpuStatus, userStatus]).then(function () {
-                res.json(status);
-            });
+                .catch((error) => {
+                    console.log(error);
+                    res.sendStatus(500);
+                });
+        }).catch((error) => {
+            console.log(error);
+            res.sendStatus(500);
         });
-    });    
+    });
 });
 
 router.post('/:machineId/wake', function (req, res) {

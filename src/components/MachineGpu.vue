@@ -1,7 +1,7 @@
 <template>
   <v-card :elevation="6">
     <v-card-title>
-      <machine-header :status="online" :machine="machine"></machine-header>
+      <machine-header :status="online" :machine="machine" :loading="loading"></machine-header>
     </v-card-title>
     <gpu-status v-if="nvidiaStats" :nvidia-stats="nvidiaStats"></gpu-status>
     <v-overlay absolute :value="error">
@@ -27,6 +27,7 @@ export default Vue.extend({
     return {
       timer: 0,
       retries: 0,
+      loading: false,
       online: '',
       nvidiaStats: null,
       error: '',
@@ -38,9 +39,11 @@ export default Vue.extend({
   methods: {
     fetchUpdate() {
       const data = this;
+      data.loading = true;
 
       fetch('api/machines/' + this.machine.id + '/gpu')
         .then((response) => {
+          data.loading = false;
           if (!response.ok) { throw response; }
 
           return response.json();
@@ -62,7 +65,9 @@ export default Vue.extend({
         })
         .catch((error) => {
           data.retries++;
-          if (data.retries < 3) { return; }
+          if (data.retries < 3) {
+            return;
+          }
 
           if (typeof error.text === 'function') {
             error.text().then((errorMessage: string) => {

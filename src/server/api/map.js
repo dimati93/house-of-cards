@@ -38,6 +38,20 @@ function toGpuStatus(nvidiaSmi) {
     }
 } 
 
+function toUsers(stdout) {
+    var rows = stdout.split('\n');
+    return rows.map((r) => {
+        var parts = r.split(" ").filter(s => s !== '');
+        return {
+            login: parts[0],
+            interface: parts[1],
+            time: parts[2] + ' ' + parts[3],
+            ip: parts[4].replace(/[\(\)]/g, '')
+        }
+    });
+}
+
 module.exports = {
-    toGpuStatus : toGpuStatus
+    toGpuStatus : toGpuStatus,
+    toUsers : toUsers,
 };

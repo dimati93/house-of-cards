@@ -3,18 +3,18 @@
     <div v-if="loading">Loading...</div>
     <div v-if="error">{{error}}</div>
     <div v-if="machines">
-      <machine v-for="machine in machines" :key="machine.id" :machine="machine"></machine>
+      <machine-gpu v-for="machine in machines" :key="machine.id" :machine="machine"></machine-gpu>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import Machine from '../components/Machine.vue';
+import MachineGpu from '../components/MachineGpu.vue';
 
 export default Vue.extend({
   components: {
-    Machine,
+    MachineGpu,
   },
   data() {
     return {

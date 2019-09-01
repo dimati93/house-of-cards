@@ -2,15 +2,17 @@
   <div class="machine-header">    
     <v-icon v-if="status === 'online'" color="green" title="Online">mdi-server-network</v-icon>
     <v-icon v-else-if="status === 'offline'" color="red" title="Offline">mdi-server-network-off</v-icon>
-    <v-progress-circular v-else indeterminate color="primary" :size="20" width="2"></v-progress-circular>
+    <v-icon v-else>mdi-server-network</v-icon>
     <span> {{ machine.name }} </span>
+    
+    <v-progress-circular v-if="loading" indeterminate color="primary" :size="20" width="2"></v-progress-circular>
     <v-btn rounded color="primary" class="float-right" title="Wake"
       v-if="status === 'offline'" 
       v-on:click="sendWakeCall" 
       :disabled="wakeTimeout > 0">
       <template v-if="wakeTimeout > 0">
         <v-progress-circular  :value="wakeTimeout" :size="20" width="2"></v-progress-circular>
-        <span> wating for wake up</span>
+        <div class="pr-2"> wating for wake up</div>
       </template>      
       <v-icon v-else>mdi-power-standby</v-icon>
     </v-btn>
@@ -33,6 +35,7 @@ export default Vue.extend({
     props: {
         machine: Object,
         status: String,
+        loading: Boolean,
     },
     data() {
         return {

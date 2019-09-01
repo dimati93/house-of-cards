@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <v-app-bar app>
+    <v-app-bar app >
       <v-toolbar-title class="headline text-uppercase">
         <span>House of Cards</span>
       </v-toolbar-title>
@@ -11,7 +12,7 @@
           background-color="transparent"
         >
           <v-tab to="/">GPUs</v-tab>
-         <!-- <v-tab to="/users">Users</v-tab> -->
+          <v-tab to="/users">Users</v-tab>
         </v-tabs>
       </template>
 

@@ -1,32 +1,32 @@
 <template>
-  <v-container>
-    <v-row no-gutters>
-      <v-col v-for="(gpu, index) in nvidiaStats.gpu" v-bind:key="gpu.id" sm="12" md="12" lg="6">
-        <v-card elevation="3" class="ma-2">
+  <v-container fluid>
+    <v-row dense>
+      <v-col v-for="(gpu, index) in nvidiaStats.gpu" v-bind:key="gpu.id" cols="12" md="6">
+        <v-card elevation="3">
           <v-card-title>
             <v-icon color="light-green darken-1">mdi-expansion-card-variant</v-icon>
             <span class="pl-2">GPU {{ index }}</span>
           </v-card-title>
 
-          <v-container>
+          <v-container fluid>
             <v-row no-gutters>
               <v-col cols="auto" class="mr-auto">GPU</v-col>
               <v-col cols="auto">{{gpu.utilization.gpu}} %</v-col>
-              <v-col sm="12">
+              <v-col cols="12">
                 <v-progress-linear color="red darken-2" rounded :value="gpu.utilization.gpu"></v-progress-linear>
               </v-col>
             </v-row>
             <v-row no-gutters>
               <v-col cols="auto" class="mr-auto">Memory</v-col>
               <v-col cols="auto">{{gpu.utilization.memory}} %</v-col>
-              <v-col sm="12">
+              <v-col cols="12">
                 <v-progress-linear color="green darken-2" rounded :value="gpu.utilization.memory"></v-progress-linear>
               </v-col>
             </v-row>
             <v-row no-gutters>
               <v-col cols="auto" class="mr-auto">Power</v-col>
               <v-col cols="auto">{{gpu.power.draw}}/{{gpu.power.limit}} W</v-col>
-              <v-col sm="12">
+              <v-col cols="12">
                 <v-progress-linear
                   color="yellow darken-2"
                   rounded

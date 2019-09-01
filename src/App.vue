@@ -1,6 +1,5 @@
 <template>
   <v-app>
-    <v-app-bar app>
     <v-app-bar app >
       <v-toolbar-title class="headline text-uppercase">
         <span>House of Cards</span>

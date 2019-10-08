@@ -1,29 +1,14 @@
-# house-of-vue
+# house-of-cards
 
-## Project setup
-```
-npm install
-```
+House of (GPU) Cards is a server to manage home park with
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Features
+* Turn on machine with magic packet 
+* Ping nvidia-smi status for GPU
+* Monitor current ssh connections
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## Setup
+Deployed on a LAN mini-PC, e.g. Orange PI
 
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Demo
+http://dimati93.znet.kiev.ua:8080/
